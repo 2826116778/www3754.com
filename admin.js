@@ -121,7 +121,11 @@ function handleFormSubmit(event) {
     alert('商品保存成功！');
   };
 
-  if (selectedFile) {
+  // 优先使用已处理后的图片（imageHiddenInput），如果没有则使用已有 image 字段
+  if (imageHiddenInput.value && imageHiddenInput.value.trim()) {
+    saveProduct(imageHiddenInput.value.trim());
+  } else if (selectedFile) {
+    // 作为后备：直接读取原始文件（不推荐，通常已在选择时处理）
     const reader = new FileReader();
     reader.onload = () => saveProduct(reader.result);
     reader.onerror = () => alert('图片读取失败，请重试。');
@@ -217,19 +221,60 @@ function handleImageFileChange() {
   if (!file) {
     imagePreview.style.display = 'none';
     imagePreviewImg.src = '';
+    imageHiddenInput.value = '';
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    imageHiddenInput.value = reader.result;
-    imagePreviewImg.src = reader.result;
-    imagePreview.style.display = 'block';
-  };
-  reader.onerror = () => {
-    alert('图片读取失败，请重试。');
-  };
-  reader.readAsDataURL(file);
+  // 处理图片：裁剪并缩放为 800x600（覆盖式填充），保持中心对齐
+  processImageFile(file, 800, 600, 0.85)
+    .then(dataUrl => {
+      imageHiddenInput.value = dataUrl;
+      imagePreviewImg.src = dataUrl;
+      imagePreview.style.display = 'block';
+      // 清空 file input 避免重复读取原始大文件
+      imageFileInput.value = '';
+    })
+    .catch(err => {
+      console.error(err);
+      alert('图片处理失败，请重试。');
+    });
+}
+
+function processImageFile(file, targetWidth = 800, targetHeight = 600, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('文件读取失败'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('图片加载失败'));
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+          const ctx = canvas.getContext('2d');
+
+          // 计算 cover 缩放（填满并裁剪）
+          const ratio = Math.max(targetWidth / img.width, targetHeight / img.height);
+          const sw = targetWidth / ratio;
+          const sh = targetHeight / ratio;
+          const sx = (img.width - sw) / 2;
+          const sy = (img.height - sh) / 2;
+
+          // 将裁剪后的原图绘制到目标 canvas
+          ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetWidth, targetHeight);
+
+          const mime = 'image/jpeg';
+          const dataUrl = canvas.toDataURL(mime, quality);
+          resolve(dataUrl);
+        } catch (e) {
+          reject(e);
+        }
+      };
+      img.src = String(reader.result);
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 window.addEventListener('DOMContentLoaded', initializeAdminPage);
