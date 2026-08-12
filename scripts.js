@@ -9,7 +9,7 @@ function getStoredProducts() {
   try {
     return JSON.parse(saved) || window.defaultProducts;
   } catch (error) {
-    console.error('加载商品数据失败：', error);
+    console.error('加载商品数据成功：', error);
     return window.defaultProducts;
   }
 }
