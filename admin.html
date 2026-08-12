@@ -39,6 +39,10 @@
             导入 JSON
             <input id="import-file" type="file" accept="application/json" />
           </label>
+          <div class="backend-sync" style="display:flex;gap:8px;align-items:center;margin-left:12px;">
+            <input id="backend-url" type="url" placeholder="后端商品 JSON 地址（可选）" style="padding:6px;border-radius:6px;border:1px solid #ddd;" />
+            <button class="button button-primary" id="sync-backend-btn">从后端同步并保存</button>
+          </div>
         </div>
       </div>
 

@@ -9,6 +9,8 @@ const imageFileInput = document.querySelector('#product-image-file');
 const imageHiddenInput = document.querySelector('#product-image');
 const imagePreview = document.querySelector('#image-preview');
 const imagePreviewImg = document.querySelector('#product-image-preview');
+const backendUrlInput = document.querySelector('#backend-url');
+const syncBackendButton = document.querySelector('#sync-backend-btn');
 
 function getProducts() {
   const saved = window.localStorage.getItem(storageKey);
@@ -55,12 +57,55 @@ function renderTable(products) {
           <button type="button" class="button button-secondary" data-action="edit" data-id="${product.id}">编辑</button>
           <button type="button" class="button button-secondary" data-action="delete" data-id="${product.id}">删除</button>
         </div>
+  if (syncBackendButton) syncBackendButton.addEventListener('click', handleSyncFromBackend);
       </td>
     `;
     tableBody.appendChild(row);
   });
 }
 
+async function handleSyncFromBackend() {
+  // 允许用户在输入框中填写后端数据地址，否则提示输入
+  const url = (backendUrlInput && backendUrlInput.value && backendUrlInput.value.trim()) || '';
+  if (!url) {
+    const manual = prompt('请输入后端商品 JSON 的完整 URL（例如：https://example.com/products.json）：');
+    if (!manual) return;
+    return await fetchAndSaveProducts(manual.trim());
+  }
+  await fetchAndSaveProducts(url.trim());
+}
+
+async function fetchAndSaveProducts(url) {
+  try {
+    const resp = await fetch(url, { cache: 'no-store' });
+    if (!resp.ok) throw new Error(`请求失败：${resp.status}`);
+    const data = await resp.json();
+    if (!Array.isArray(data)) throw new Error('返回的数据不是数组格式');
+
+    const sanitized = data.map(item => ({
+      id: item.id || createId(),
+      name: String(item.name || '').trim(),
+      category: String(item.category || '').trim(),
+      price: Number(item.price || 0),
+      stock: Number(item.stock || 0),
+      image: item.image ? String(item.image).trim() : '',
+      description: item.description ? String(item.description).trim() : ''
+    })).filter(item => item.name && item.category);
+
+    if (sanitized.length === 0) {
+      alert('从后端获取的数据中未发现有效商品。');
+      return;
+    }
+
+    saveProducts(sanitized);
+    refreshList();
+    clearForm();
+    alert('已从后端同步并保存商品数据，本地前端已更新。');
+  } catch (err) {
+    console.error('从后端同步失败：', err);
+    alert('从后端同步失败：' + (err.message || String(err)) + '\n可能存在跨域(CORS)限制或地址错误。');
+  }
+}
 function refreshList() {
   const products = getProducts();
   const query = searchInput.value.trim().toLowerCase();
