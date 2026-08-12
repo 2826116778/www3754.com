@@ -11,6 +11,9 @@ const imagePreview = document.querySelector('#image-preview');
 const imagePreviewImg = document.querySelector('#product-image-preview');
 const backendUrlInput = document.querySelector('#backend-url');
 const syncBackendButton = document.querySelector('#sync-backend-btn');
+const publicUrlInput = document.querySelector('#public-url');
+const setPublicUrlButton = document.querySelector('#set-public-url-btn');
+const publishPublicButton = document.querySelector('#publish-public-btn');
 
 function getProducts() {
   const saved = window.localStorage.getItem(storageKey);
@@ -57,7 +60,6 @@ function renderTable(products) {
           <button type="button" class="button button-secondary" data-action="edit" data-id="${product.id}">编辑</button>
           <button type="button" class="button button-secondary" data-action="delete" data-id="${product.id}">删除</button>
         </div>
-  if (syncBackendButton) syncBackendButton.addEventListener('click', handleSyncFromBackend);
       </td>
     `;
     tableBody.appendChild(row);
@@ -104,6 +106,40 @@ async function fetchAndSaveProducts(url) {
   } catch (err) {
     console.error('从后端同步失败：', err);
     alert('从后端同步失败：' + (err.message || String(err)) + '\n可能存在跨域(CORS)限制或地址错误。');
+  }
+}
+function handleSetPublicUrl() {
+  const url = (publicUrlInput && publicUrlInput.value && publicUrlInput.value.trim()) || '';
+  if (!url) {
+    const manual = prompt('请输入公开产品 JSON 的 URL（前端将优先从该地址拉取商品）：');
+    if (!manual) return;
+    localStorage.setItem('modern-shop-public-url', manual.trim());
+    alert('已保存公开数据 URL，前端将优先从该地址拉取商品（如可访问）。');
+    return;
+  }
+  localStorage.setItem('modern-shop-public-url', url);
+  alert('已保存公开数据 URL，前端将优先从该地址拉取商品（如可访问）。');
+}
+
+async function handlePublishToPublicUrl() {
+  const url = (publicUrlInput && publicUrlInput.value && publicUrlInput.value.trim()) || localStorage.getItem('modern-shop-public-url') || '';
+  if (!url) {
+    alert('请先在输入框填写要发布到的 URL，或先设置公开 URL。');
+    return;
+  }
+  if (!confirm('确认将当前本地商品数据以 JSON POST 到该 URL？请确保目标接口接受 POST 并允许跨域。')) return;
+  const products = getProducts();
+  try {
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(products)
+    });
+    if (!resp.ok) throw new Error(`请求失败：${resp.status}`);
+    alert('已成功发布到该 URL（服务器返回：' + resp.status + '）。');
+  } catch (err) {
+    console.error('发布到公开 URL 失败：', err);
+    alert('发布失败：' + (err.message || String(err)) + '\n请检查目标接口是否允许 POST、是否支持 CORS。');
   }
 }
 function refreshList() {
@@ -259,6 +295,9 @@ function initializeAdminPage() {
   exportButton.addEventListener('click', handleExport);
   importFile.addEventListener('change', handleImport);
   imageFileInput.addEventListener('change', handleImageFileChange);
+  if (syncBackendButton) syncBackendButton.addEventListener('click', handleSyncFromBackend);
+  if (setPublicUrlButton) setPublicUrlButton.addEventListener('click', handleSetPublicUrl);
+  if (publishPublicButton) publishPublicButton.addEventListener('click', handlePublishToPublicUrl);
 }
 
 function handleImageFileChange() {

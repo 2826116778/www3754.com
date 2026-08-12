@@ -43,6 +43,11 @@
             <input id="backend-url" type="url" placeholder="后端商品 JSON 地址（可选）" style="padding:6px;border-radius:6px;border:1px solid #ddd;" />
             <button class="button button-primary" id="sync-backend-btn">从后端同步并保存</button>
           </div>
+          <div class="public-source" style="display:flex;gap:8px;align-items:center;margin-left:12px;">
+            <input id="public-url" type="url" placeholder="公开产品 JSON 地址（前端优先读取）" style="padding:6px;border-radius:6px;border:1px solid #ddd;" />
+            <button class="button button-secondary" id="set-public-url-btn">设置为前端数据源</button>
+            <button class="button button-primary" id="publish-public-btn">发布到该 URL（POST）</button>
+          </div>
         </div>
       </div>
 

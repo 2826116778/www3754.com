@@ -14,6 +14,31 @@ function getStoredProducts() {
   }
 }
 
+function fetchWithTimeout(resource, options = {}) {
+  const { timeout = 5000 } = options;
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  return fetch(resource, { ...options, signal: controller.signal })
+    .finally(() => clearTimeout(id));
+}
+
+async function tryLoadPublicProducts() {
+  const publicUrl = localStorage.getItem('modern-shop-public-url');
+  if (!publicUrl) return null;
+  try {
+    const resp = await fetchWithTimeout(publicUrl, { cache: 'no-store', timeout: 5000 });
+    if (!resp.ok) throw new Error(`请求失败：${resp.status}`);
+    const data = await resp.json();
+    if (!Array.isArray(data)) throw new Error('返回数据格式不是数组');
+    // 合法则缓存到 localStorage 并返回
+    localStorage.setItem(storageKey, JSON.stringify(data));
+    return data;
+  } catch (err) {
+    console.warn('无法从公开 URL 加载商品，回退到本地：', err);
+    return null;
+  }
+}
+
 function formatPrice(value) {
   return `¥${value.toFixed(2)}`;
 }
@@ -63,8 +88,9 @@ function renderElectronicsSection(products) {
   electronics.slice(0, 4).forEach(product => grid.appendChild(renderProductCard(product)));
 }
 
-function initializeLandingPage() {
-  const products = getStoredProducts();
+async function initializeLandingPage() {
+  let products = await tryLoadPublicProducts();
+  if (!products) products = getStoredProducts();
   renderElectronicsSection(products);
   renderProductGrid(products);
 }
