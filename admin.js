@@ -1,4 +1,3 @@
-const storageKey = 'modern-shop-products';
 const searchInput = document.querySelector('#product-search');
 const tableBody = document.querySelector('#product-table');
 const form = document.querySelector('#product-form');
@@ -16,21 +15,11 @@ const setPublicUrlButton = document.querySelector('#set-public-url-btn');
 const publishPublicButton = document.querySelector('#publish-public-btn');
 
 function getProducts() {
-  const saved = window.localStorage.getItem(storageKey);
-  if (!saved) {
-    window.localStorage.setItem(storageKey, JSON.stringify(window.defaultProducts));
-    return window.defaultProducts;
-  }
-  try {
-    return JSON.parse(saved) || window.defaultProducts;
-  } catch (error) {
-    console.error('读取本地商品数据失败：', error);
-    return window.defaultProducts;
-  }
+  return getAllProductsSync();
 }
 
 function saveProducts(products) {
-  window.localStorage.setItem(storageKey, JSON.stringify(products));
+  saveProductsToStorage(products);
 }
 
 function createId() {
@@ -99,7 +88,9 @@ async function fetchAndSaveProducts(url) {
       return;
     }
 
-    saveProducts(sanitized);
+    const current = getAllProductsSync();
+    const merged = mergeProducts(current, sanitized);
+    saveProducts(merged);
     refreshList();
     clearForm();
     alert('已从后端同步并保存商品数据，本地前端已更新。');
@@ -270,7 +261,9 @@ function handleImport(event) {
         description: item.description ? String(item.description).trim() : ''
       })).filter(item => item.name && item.category);
 
-      saveProducts(sanitized);
+      const current = getAllProductsSync();
+      const merged = mergeProducts(current, sanitized);
+      saveProducts(merged);
       refreshList();
       clearForm();
       alert('商品导入成功！');
@@ -283,10 +276,8 @@ function handleImport(event) {
   event.target.value = '';
 }
 
-function initializeAdminPage() {
-  if (!window.localStorage.getItem(storageKey)) {
-    window.localStorage.setItem(storageKey, JSON.stringify(window.defaultProducts));
-  }
+async function initializeAdminPage() {
+  await getAllProducts();
   refreshList();
   form.addEventListener('submit', handleFormSubmit);
   resetButton.addEventListener('click', clearForm);

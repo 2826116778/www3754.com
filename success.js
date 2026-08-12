@@ -3,19 +3,6 @@ function getUrlParameter(name) {
   return params.get(name);
 }
 
-function getProducts() {
-  const saved = window.localStorage.getItem('modern-shop-products');
-  if (!saved) {
-    return window.defaultProducts || [];
-  }
-  try {
-    return JSON.parse(saved) || window.defaultProducts || [];
-  } catch (error) {
-    console.error('读取商品数据失败：', error);
-    return window.defaultProducts || [];
-  }
-}
-
 function formatPrice(value) {
   return `¥${value.toFixed(2)}`;
 }
@@ -25,11 +12,11 @@ function getChannelName(channel) {
   return 'USDT 支付';
 }
 
-function initializeSuccessPage() {
+async function initializeSuccessPage() {
   const productId = getUrlParameter('product');
   const channel = getUrlParameter('channel') || 'usdt';
   const orderId = getUrlParameter('order') || `ORD${Date.now()}`;
-  const products = getProducts();
+  const products = await getAllProducts();
   const product = products.find(item => item.id === productId) || products[0];
 
   const message = document.querySelector('#success-message');
