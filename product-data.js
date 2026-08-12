@@ -1,7 +1,20 @@
 const PRODUCT_DATA_KEY = 'modern-shop-products';
 const PRODUCT_DATA_VERSION_KEY = 'modern-shop-products-version';
-const PRODUCT_DATA_VERSION = '2026-08-12-v3';
+const PRODUCT_DATA_VERSION = '2026-08-12-v4';
 const PRODUCT_FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80';
+const STALE_LEGACY_DEFAULT_IDS = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'];
+
+function getDefaultProducts() {
+  return Array.isArray(window.defaultProducts) ? window.defaultProducts : [];
+}
+
+function isStaleLegacyDefault(product) {
+  return !!product && STALE_LEGACY_DEFAULT_IDS.indexOf(String(product.id)) !== -1;
+}
+
+function cleanStoredProducts(products) {
+  return Array.isArray(products) ? products.filter(product => !isStaleLegacyDefault(product)) : products;
+}
 
 function normalizeProduct(product) {
   if (!product || typeof product !== 'object') return null;
@@ -34,8 +47,29 @@ function mergeProducts(...lists) {
   return Array.from(mergedMap.values());
 }
 
+function readLocalStorage(key) {
+  try {
+    if (!window.localStorage) return null;
+    return window.localStorage.getItem(key);
+  } catch (error) {
+    console.warn('localStorage read failed:', error);
+    return null;
+  }
+}
+
+function writeLocalStorage(key, value) {
+  try {
+    if (!window.localStorage) return false;
+    window.localStorage.setItem(key, value);
+    return true;
+  } catch (error) {
+    console.warn('localStorage write failed:', error);
+    return false;
+  }
+}
+
 function parseStoredProducts() {
-  const saved = window.localStorage.getItem(PRODUCT_DATA_KEY);
+  const saved = readLocalStorage(PRODUCT_DATA_KEY);
   if (!saved) return null;
   try {
     const parsed = JSON.parse(saved);
@@ -48,22 +82,26 @@ function parseStoredProducts() {
 
 function saveAllProducts(products) {
   const merged = mergeProducts(products);
-  window.localStorage.setItem(PRODUCT_DATA_KEY, JSON.stringify(merged));
-  window.localStorage.setItem(PRODUCT_DATA_VERSION_KEY, PRODUCT_DATA_VERSION);
+  writeLocalStorage(PRODUCT_DATA_KEY, JSON.stringify(merged));
+  writeLocalStorage(PRODUCT_DATA_VERSION_KEY, PRODUCT_DATA_VERSION);
   return merged;
 }
 
 function saveProductsToStorage(products) {
-  window.localStorage.setItem(PRODUCT_DATA_KEY, JSON.stringify(products));
-  window.localStorage.setItem(PRODUCT_DATA_VERSION_KEY, PRODUCT_DATA_VERSION);
+  writeLocalStorage(PRODUCT_DATA_KEY, JSON.stringify(products));
+  writeLocalStorage(PRODUCT_DATA_VERSION_KEY, PRODUCT_DATA_VERSION);
 }
 
 function getStoredProductsSync() {
-  const stored = parseStoredProducts();
-  if (stored && window.localStorage.getItem(PRODUCT_DATA_VERSION_KEY) === PRODUCT_DATA_VERSION) {
+  const stored = cleanStoredProducts(parseStoredProducts());
+  if (stored && readLocalStorage(PRODUCT_DATA_VERSION_KEY) === PRODUCT_DATA_VERSION) {
     return stored;
   }
   return null;
+}
+
+function getStoredProducts() {
+  return getAllProductsSync();
 }
 
 function fetchWithTimeout(resource, options = {}) {
@@ -76,7 +114,7 @@ function fetchWithTimeout(resource, options = {}) {
 
 async function tryLoadRepoProducts() {
   try {
-    const resp = await fetchWithTimeout('products-export.json', { cache: 'no-store', timeout: 5000 });
+    const resp = await fetchWithTimeout('products-export.json', { timeout: 12000 });
     if (!resp.ok) throw new Error(`请求失败：${resp.status}`);
     const data = await resp.json();
     if (!Array.isArray(data)) throw new Error('返回数据格式不是数组');
@@ -88,14 +126,14 @@ async function tryLoadRepoProducts() {
 }
 
 async function getStaticProducts() {
-  const defaultProducts = Array.isArray(window.defaultProducts) ? window.defaultProducts : [];
+  const defaultProducts = getDefaultProducts();
   const repoProducts = await tryLoadRepoProducts();
   return mergeProducts(defaultProducts, repoProducts);
 }
 
 async function getAllProducts() {
-  const stored = parseStoredProducts();
-  if (stored && window.localStorage.getItem(PRODUCT_DATA_VERSION_KEY) === PRODUCT_DATA_VERSION) {
+  const stored = cleanStoredProducts(parseStoredProducts());
+  if (stored && readLocalStorage(PRODUCT_DATA_VERSION_KEY) === PRODUCT_DATA_VERSION) {
     return stored;
   }
 
@@ -108,8 +146,8 @@ async function getAllProducts() {
 function getAllProductsSync() {
   const stored = getStoredProductsSync();
   if (stored) return stored;
-  const defaultProducts = Array.isArray(window.defaultProducts) ? window.defaultProducts : [];
-  const currentStored = parseStoredProducts() || [];
+  const defaultProducts = getDefaultProducts();
+  const currentStored = cleanStoredProducts(parseStoredProducts()) || [];
   return mergeProducts(defaultProducts, currentStored);
 }
 

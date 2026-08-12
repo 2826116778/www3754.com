@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&#21830;&#22478;&#35775;&#38382;&#39564;&#35777;</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .access-shell {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .access-panel {
+      width: min(420px, 100%);
+      padding: 2rem;
+      border-radius: 28px;
+      background: rgba(18, 24, 43, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.4);
+    }
+
+    .access-brand,
+    .access-eyebrow,
+    .access-welcome {
+      margin: 0;
+    }
+
+    .access-brand {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #eef2ff;
+    }
+
+    .access-eyebrow {
+      margin-top: 0.75rem;
+      color: #5ad9c0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .access-welcome {
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      color: #9fb4d3;
+    }
+
+    .access-panel h1 {
+      margin: 0.5rem 0 0;
+      font-size: clamp(1.65rem, 6vw, 2.1rem);
+      line-height: 1.2;
+      color: #eef2ff;
+    }
+
+    .access-subtitle {
+      margin: 0.75rem 0 0;
+      color: #9fb4d3;
+      line-height: 1.7;
+    }
+
+    .access-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #9fb4d3;
+      font-size: 0.92rem;
+    }
+
+    #access-form {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    #access-password {
+      width: 100%;
+      min-width: 0;
+      padding: 0.95rem 1rem;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #eef2ff;
+      font: inherit;
+    }
+
+    #access-password::placeholder {
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .access-submit {
+      width: 100%;
+    }
+
+    .access-error {
+      min-height: 1.5rem;
+      margin: 0;
+      color: #ff8fa3;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+  </style>
+  <script src="auth.js?v=20260812"></script>
+</head>
+<body>
+  <main class="access-shell">
+    <section class="access-panel" aria-labelledby="access-title">
+      <p class="access-brand">Modern Shop</p>
+      <p class="access-welcome">Welcome</p>
+      <p class="access-eyebrow">Private Store</p>
+      <h1 id="access-title">&#21830;&#22478;&#35775;&#38382;&#39564;&#35777;</h1>
+      <p class="access-subtitle">&#35831;&#36755;&#20837;&#35775;&#38382;&#23494;&#30721;</p>
+      <form id="access-form" autocomplete="off">
+        <label class="access-label" for="access-password">&#35775;&#38382;&#23494;&#30721;</label>
+        <input id="access-password" type="password" autocomplete="current-password" placeholder="&#35831;&#36755;&#20837;&#35775;&#38382;&#23494;&#30721;" />
+        <button id="access-submit" class="button button-primary access-submit" type="submit">&#36827;&#20837;&#21830;&#22478;</button>
+        <p id="access-error" class="access-error" role="alert"></p>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var form = document.getElementById('access-form');
+      var input = document.getElementById('access-password');
+      var error = document.getElementById('access-error');
+
+      function getReturnPath() {
+        var query = window.location.search.substring(1);
+        if (!query) return 'index.html';
+        var parts = query.split('&');
+        for (var i = 0; i < parts.length; i++) {
+          if (parts[i].indexOf('return=') === 0) {
+            try {
+              return decodeURIComponent(parts[i].substring(7)) || 'index.html';
+            } catch (e) {
+              return 'index.html';
+            }
+          }
+        }
+        return 'index.html';
+      }
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var password = input.value;
+        if (!password) {
+          error.textContent = '\u8bf7\u8f93\u5165\u8bbf\u95ee\u5bc6\u7801\u3002';
+          return;
+        }
+        if (!verifyAccessPassword(password)) {
+          error.textContent = '\u5bc6\u7801\u9519\u8bef\uff0c\u8bf7\u91cd\u65b0\u8f93\u5165\u3002';
+          input.select();
+          return;
+        }
+        setSiteAuthenticated();
+        window.location.href = getReturnPath();
+      });
+    })();
+  </script>
+</body>
+</html>
