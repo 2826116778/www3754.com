@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>订单确认 | Modern Shop</title>
+  <meta name="description" content="确认订单并选择付款方式。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">Modern Shop</a>
+      <nav class="nav-links">
+        <a href="index.html">首页</a>
+        <a href="payment.html">付款页面</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section-hero payment-hero">
+      <div class="container section-header">
+        <span class="eyebrow">订单确认</span>
+        <h1>确认订单信息并完成支付</h1>
+        <p class="hero-text">请确认商品、金额和支付方式，完成支付后查看支付成功页面。</p>
+      </div>
+    </section>
+
+    <section class="container section-header">
+      <div id="confirm-detail" class="payment-summary"></div>
+      <div class="screenshot-upload-card">
+        <h3>上传支付成功截图</h3>
+        <p>请在完成 USDT 支付后，上传钱包支付成功的截屏以验证付款凭证。</p>
+        <label class="button button-secondary file-input-label">
+          选择截图
+          <input id="screenshot-file" type="file" accept="image/*" />
+        </label>
+        <div class="image-preview" id="screenshot-preview" style="display:none;">
+          <img id="screenshot-preview-img" alt="支付成功截图预览" />
+        </div>
+        <p class="payment-note">上传后即可点击“立即提交并完成”进入支付成功页面。</p>
+      </div>
+      <div class="payment-actions" id="confirm-actions"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 Modern Shop。订单确认页。</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="confirm.js"></script>
+</body>
+</html>

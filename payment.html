@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>USDT 极速扫码支付 | Modern Shop</title>
+  <meta name="description" content="选择 USDT 扫码支付，安全快捷完成数字货币结算。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">Modern Shop</a>
+      <nav class="nav-links">
+        <a href="index.html">首页</a>
+        <a href="#payment-options">付款方式</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section-hero payment-hero">
+      <div class="container section-header">
+        <span class="eyebrow">付款页面</span>
+        <h1>USDT 收款扫码</h1>
+        <p class="hero-text">请选择 USDT 支付方式，使用支持 USDT 的钱包扫描二维码完成付款。支付成功后将在下一页上传付款截图。</p>
+      </div>
+    </section>
+
+    <section class="section-product-detail container" id="product-detail"></section>
+
+    <section id="payment-options" class="section-payments">
+      <div class="container section-header">
+        <span class="eyebrow">支付方式</span>
+        <h2>请选择您要使用的支付方式</h2>
+      </div>
+      <div class="payments-grid">
+        <article class="payment-card payment-active" data-channel="usdt">
+          <h3>USDT 扫码支付</h3>
+          <p>使用支持 USDT 的钱包扫描二维码，完成数字货币支付。</p>
+        </article>
+      </div>
+      <div id="qr-area" class="payment-qr-area container">
+        <div class="payment-qr-card">
+          <h3>扫码支付</h3>
+          <p>请使用对应支付 App 扫描下方二维码完成付款。</p>
+          <img id="payment-qr-image" class="payment-qr-image" src="u-payment-qrcode.png" alt="U 地址收款二维码" />
+          <p class="payment-qr-note">请使用支持 U 地址扫码支付的 App 扫描二维码，收款地址：TXRR6yqPVaKKnrHvxxNFvDGsU6DeENMS8Q。</p>
+        </div>
+      </div>
+      <div class="payment-actions">
+        <button class="button button-primary" id="confirm-order">确认订单并支付</button>
+        <a class="button button-secondary" href="index.html">返回商品</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 Modern Shop。安全支付体验展示页面。</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="payment.js"></script>
+</body>
+</html>

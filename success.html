@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>支付成功 | Modern Shop</title>
+  <meta name="description" content="支付完成，订单已提交成功。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">Modern Shop</a>
+      <nav class="nav-links">
+        <a href="index.html">首页</a>
+        <a href="payment.html">继续购物</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section-hero payment-hero">
+      <div class="container section-header">
+        <span class="eyebrow">支付成功</span>
+        <h1>支付已完成</h1>
+        <p class="hero-text">感谢您的购买，订单已提交。您可以继续浏览商品或查看订单详情。</p>
+      </div>
+    </section>
+
+    <section class="container section-header">
+      <div class="payment-summary payment-summary-card">
+        <h2>订单完成</h2>
+        <p id="success-message"></p>
+        <div class="image-preview" id="success-screenshot" style="display:none;">
+          <img id="success-screenshot-img" alt="支付成功截图" />
+        </div>
+        <a class="button button-primary" href="index.html">返回首页</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 Modern Shop。支付成功页面。</p>
+    </div>
+  </footer>
+
+  <script src="success.js"></script>
+</body>
+</html>

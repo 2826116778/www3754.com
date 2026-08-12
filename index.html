@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Shop | 专业商城首页</title>
+  <meta name="description" content="现代化商城首页，专业商品展示与多种支付方式，适合独立品牌电商。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">Modern Shop</a>
+      <nav class="nav-links">
+        <a href="#products">商品</a>
+        <a href="#features">特色</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero section-hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">专业商城解决方案</p>
+          <h1>为您的品牌打造现代化商城首页</h1>
+          <p class="hero-text">展示精选商品、优化转化体验，并提供高效管理方案，让用户购物更安心。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#products">立即浏览商品</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="product-card-highlight">
+            <span class="product-label">爆款推荐</span>
+            <h2>智能商务手表</h2>
+            <p>超长续航、沉浸显示与专业健康管理，适合职场与运动场景。</p>
+            <div class="price-row">
+              <span class="price">¥1,299</span>
+              <span class="badge">限时热销</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-stats">
+      <div class="container stats-grid">
+        <div class="stat-card">
+          <strong>200+</strong>
+          <span>精选商品</span>
+        </div>
+        <div class="stat-card">
+          <strong>24/7</strong>
+          <span>实时库存同步</span>
+        </div>
+        <div class="stat-card">
+          <strong>99%</strong>
+          <span>客户满意率</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="electronics" class="section-electronics">
+      <div class="container section-header">
+        <span class="eyebrow">电子模块</span>
+        <h2>热门电子产品推荐</h2>
+        <p class="section-subtitle">精选智能科技与办公电子，帮助你的商城展示更专业的电子品类。</p>
+      </div>
+      <div class="product-grid" id="electronics-grid"></div>
+    </section>
+
+    <section id="products" class="section-products">
+      <div class="container section-header">
+        <span class="eyebrow">商城商品</span>
+        <h2>热销商品一览</h2>
+      </div>
+      <div class="product-grid" id="product-grid"></div>
+    </section>
+
+    <section id="payment-methods" class="section-payments">
+      <div class="container section-header">
+        <span class="eyebrow">付款方式</span>
+        <h2>USDT 付款，安全透明</h2>
+        <p class="section-subtitle">当前示例支持 USDT 支付，扫码即可完成快速结算。</p>
+      </div>
+      <div class="payments-grid">
+        <article class="payment-card">
+          <h3>USDT 支付</h3>
+          <p>使用支持 USDT 的钱包扫码支付，适合数字货币收款场景。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="features" class="section-features">
+      <div class="container section-header">
+        <span class="eyebrow">为什么选择我们</span>
+        <h2>专业视觉与高效商城管理</h2>
+      </div>
+      <div class="features-grid">
+        <article class="feature-card">
+          <h3>优雅商品展示</h3>
+          <p>专业的商品卡片设计，让用户在首页就能快速找到想要的商品。</p>
+        </article>
+        <article class="feature-card">
+          <h3>简洁管理流程</h3>
+          <p>支持商品新增、编辑、删除以及导入导出，适合中小型商城运营。</p>
+        </article>
+        <article class="feature-card">
+          <h3>响应式优化</h3>
+          <p>移动端与桌面端同样流畅展示，覆盖多设备访问场景。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-testimonials">
+      <div class="container section-header">
+        <span class="eyebrow">客户评价</span>
+        <h2>商家与用户都认可的体验</h2>
+      </div>
+      <div class="testimonials-grid">
+        <blockquote class="testimonial-card">
+          <p>“页面设计非常专业，后台管理也很容易上手。我们上线后转化显著提升。”</p>
+          <footer>— 张女士，品牌运营经理</footer>
+        </blockquote>
+        <blockquote class="testimonial-card">
+          <p>“现代而简洁，商品展示效果一流。访客体验非常舒服。”</p>
+          <footer>— 李先生，独立电商店主</footer>
+        </blockquote>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 Modern Shop。为独立品牌打造高效商城解决方案。</p>
+      <div class="footer-links">
+        <a href="#products">商品</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>
