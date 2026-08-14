@@ -1,4 +1,4 @@
-const SITE_ACCESS_PASSWORD = 'MyShop@2026#888';
+const SITE_ACCESS_PASSWORD = 'My2026888';
 const SITE_AUTH_STORAGE_KEY = 'site_authenticated';
 
 function verifyAccessPassword(password) {
