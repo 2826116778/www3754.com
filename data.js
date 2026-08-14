@@ -3,9 +3,9 @@ window.defaultProducts = [
     "id": "p1786549286559",
     "name": "替来他明原料",
     "category": "原料",
-    "price": 200,
+    "price": 100,
     "stock": 9999,
-    "description": "一单一克50克起     有任何疑问与客服沟通    ✈️：@dfsdfdsaaa",
+    "description": "一单一克50克起     有任何疑问与客服沟通    ✈️：@sndf154",
     "image": ""
   },
   {
@@ -14,7 +14,7 @@ window.defaultProducts = [
     "category": "原料",
     "price": 130,
     "stock": 9999,
-    "description": "一单一克50克起     有任何疑问与客服沟通    ✈️：@dfsdfdsaaa",
+    "description": "一单一克50克起     有任何疑问与客服沟通    ✈️：@sndf154",
     "image": ""
   },
   {
@@ -23,7 +23,7 @@ window.defaultProducts = [
     "category": "原料",
     "price": 120,
     "stock": 9999,
-    "description": "一单一克50克起     有任何疑问与客服沟通    ✈️：@dfsdfdsaaa",
+    "description": "一单一克50克起     有任何疑问与客服沟通    ✈️：@sndf154",
     "image": ""
   },
   {
@@ -32,7 +32,7 @@ window.defaultProducts = [
     "category": "原料",
     "price": 120,
     "stock": 9999,
-    "description": "一单一克50克起     有任何疑问与客服沟通    ✈️：@dfsdfdsaaa",
+    "description": "一单一克50克起     有任何疑问与客服沟通    ✈️：@sndf154",
     "image": ""
   },
   {
